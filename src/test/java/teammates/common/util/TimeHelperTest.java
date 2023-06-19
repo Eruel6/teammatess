@@ -30,14 +30,71 @@ public class TimeHelperTest extends BaseTestCase {
     public void testFormatDateTimeForDisplay() {
         String zoneId = "UTC";
         Instant instant = LocalDateTime.of(2015, Month.NOVEMBER, 30, 12, 0).atZone(ZoneId.of(zoneId)).toInstant();
-        assertEquals("Mon, 30 Nov 2015, 12:00 NOON UTC", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
+        assertEquals("seg, 30 nov 2015, 12:00 NOON UTC", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
 
         zoneId = "Asia/Singapore";
         instant = LocalDateTime.of(2015, Month.NOVEMBER, 30, 16, 0).atZone(ZoneId.of(zoneId)).toInstant();
-        assertEquals("Mon, 30 Nov 2015, 04:00 PM SGT", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
+        assertEquals("seg, 30 nov 2015, 04:00 PM SGT", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
 
         instant = LocalDateTime.of(2015, Month.NOVEMBER, 30, 4, 0).atZone(ZoneId.of(zoneId)).toInstant();
-        assertEquals("Mon, 30 Nov 2015, 04:00 AM SGT", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
+        assertEquals("seg, 30 nov 2015, 04:00 AM SGT", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
+
+        instant = Instant.parse("2023-06-17T10:15:30Z");
+        zoneId = "Asia/Tokyo";
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        String expectedOutput = "2023-06-17 19:15:30";
+        String result = TimeHelper.formatInstant(instant, zoneId, pattern);
+        assertEquals(expectedOutput, result);
+
+        instant = null;
+        zoneId = "Asia/Tokyo";
+        pattern = "yyyy-MM-dd HH:mm:ss";
+        expectedOutput = "";
+        result = TimeHelper.formatInstant(instant, zoneId, pattern);
+        assertEquals(expectedOutput, result);
+
+        instant = Instant.parse("2023-06-17T10:15:30Z");
+        zoneId = null;
+        pattern = "yyyy-MM-dd HH:mm:ss";
+        expectedOutput = "";
+        result = TimeHelper.formatInstant(instant, zoneId, pattern);
+        assertEquals(expectedOutput, result);
+
+        instant = Instant.parse("2023-06-17T10:15:30Z");
+        zoneId = "Asia/Tokyo";
+        pattern = null;
+        expectedOutput = "";
+        result = TimeHelper.formatInstant(instant, zoneId, pattern);
+        assertEquals(expectedOutput, result);
+
+        instant = Instant.parse("2023-06-17T12:00:00Z");
+        zoneId = "UTC";
+        pattern = "hh:mm a";
+        expectedOutput = "12:00 NOON";
+        result = TimeHelper.formatInstant(instant, zoneId, pattern);
+        assertEquals(expectedOutput, result);
+
+        instant = Instant.parse("2023-06-17T10:00:30Z");
+        zoneId = "UTC";
+        pattern = "hh:mm a";
+        expectedOutput = "10:00 AM";
+        result = TimeHelper.formatInstant(instant, zoneId, pattern);
+        assertEquals(expectedOutput, result);
+
+        instant = Instant.parse("2023-06-17T10:15:30Z");
+        zoneId = "UTC";
+        pattern = "hh:mm a";
+        expectedOutput = "10:15 AM";
+        result = TimeHelper.formatInstant(instant, zoneId, pattern);
+        assertEquals(expectedOutput, result);
+        
+        instant = null;
+        zoneId = null;
+        pattern = null;
+        expectedOutput = "";
+        result = TimeHelper.formatInstant(instant, zoneId, pattern);
+        assertEquals(expectedOutput, result);
+
     }
 
     @Test
